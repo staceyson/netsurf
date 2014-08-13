@@ -180,7 +180,8 @@ framebuffer_plot_bitmap(int x, int y,
 	int bmheight;
 	int bmstride;
 	enum nsfb_format_e bmformat;
-	unsigned char *bmptr;
+	//unsigned char *bmptr;
+	nsfb_colour_t *bmptr;
 	nsfb_t *bm = (nsfb_t *)bitmap;
 
 	/* x and y define coordinate of top left of of the initial explicitly
