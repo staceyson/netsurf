@@ -43,11 +43,12 @@ $(eval $(call pkg_config_find_and_add_enabled,MOZJS,mozjs185,JavaScript))
 $(eval $(call pkg_config_find_and_add_enabled,JS,mozilla-js,JavaScript))
 
 CFLAGS += -std=c99 -g -Dsmall $(WARNFLAGS) 	\
-	  -D_BSD_SOURCE \
-	  -D_XOPEN_SOURCE=600 \
-	  -D_POSIX_C_SOURCE=200112L \
 	  $(shell $(PKG_CONFIG) --cflags libnsfb libhubbub libcss openssl) \
 	  $(shell xml2-config --cflags)
+
+ifneq ($(HOST),FreeBSD)
+    CFLAGS += -D_BSD_SOURCE -D_XOPEN_SOURCE=600 -D_POSIX_C_SOURCE=200112L
+endif
 
 LDFLAGS += -lm -Wl,--whole-archive $(shell $(PKG_CONFIG) --libs libnsfb) -Wl,--no-whole-archive 
 
@@ -75,7 +76,7 @@ endif
 # that header, we get new images built just in case.
 $(TOOLROOT)/convert_image: $(TOOLROOT)/created framebuffer/convert_image.c framebuffer/fbtk.h
 	$(VQ)echo " HOST CC: $@"
-	$(Q)$(HOST_CC) -o $@ framebuffer/convert_image.c -lpng
+	$(Q)$(HOST_CC) -I/usr/local/include -o $@ framebuffer/convert_image.c -L/usr/local/lib -lpng
 
 FB_IMAGE_left_arrow := framebuffer/res/icons/back.png
 FB_IMAGE_right_arrow := framebuffer/res/icons/forward.png
