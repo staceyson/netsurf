@@ -20,7 +20,9 @@ endif
 ifeq ($(WITH_EXPAT_BINDING),yes)
   DIR_SOURCES := expat_xmlparser.c
 
-  LDFLAGS := $(LDFLAGS) -lexpat
+  CFLAGS := $(CFLAGS) -I/usr/local/include
+
+  LDFLAGS := $(LDFLAGS) -L/usr/local/lib -lexpat
 
   DO_XML_INSTALL := yes
 endif
